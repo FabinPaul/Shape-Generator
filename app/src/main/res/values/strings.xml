@@ -15,10 +15,21 @@
     <string name="px">px</string>
     <string name="your_artboard">Your Artboard</string>
     <string name="select_color">Select Color</string>
+    <string name="purple">Purple</string>
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="black">Black</string>
 
     <string-array name="shape_array">
         <item>@string/circle</item>
         <item>@string/square</item>
         <item>@string/rectangle</item>
+    </string-array>
+
+    <string-array name="color_array">
+        <item>@string/purple</item>
+        <item>@string/red</item>
+        <item>@string/green</item>
+        <item>@string/black</item>
     </string-array>
 </resources>

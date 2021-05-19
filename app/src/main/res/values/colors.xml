@@ -12,4 +12,12 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="gray">#A8A8A8</color>
+
+    <color name="light_purple_aa">#aaa685d3</color>
+    <color name="light_purple_a6">#a685d3</color>
+    <color name="light_red_aa">#aaff5b4d</color>
+    <color name="light_red_ff">#ff5b4d</color>
+    <color name="light_green_aa">#aa80ffc9</color>
+    <color name="light_green_80">#80ffc9</color>
+    <color name="black_aa">#aa000000</color>
 </resources>

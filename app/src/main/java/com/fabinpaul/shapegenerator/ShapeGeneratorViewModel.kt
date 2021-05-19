@@ -17,17 +17,21 @@ class ShapeGeneratorViewModel @Inject constructor() : ViewModel() {
     val dimension2: LiveData<Int>
         get() = _dimension2
 
-    private val _dimension1Value = MutableLiveData<String>()
-    val dimension1Value: LiveData<String>
-        get() = _dimension1Value
+    val dimension1Value = MutableLiveData<String>()
 
-    private val _dimension2Value = MutableLiveData<String>()
-    val dimension2Value: LiveData<String>
-        get() = _dimension2Value
+    val dimension2Value = MutableLiveData<String>()
 
     private val _currentShape = MutableLiveData<String?>()
     val currentShape: LiveData<String?>
         get() = _currentShape
+
+    private val _colorSelected = MutableLiveData<Int>(R.color.light_purple_aa)
+    val colorSelected: LiveData<Int>
+        get() = _colorSelected
+
+    private val _strokeColor = MutableLiveData<Int>(R.color.light_purple_a6)
+    val strokeColor: LiveData<Int>
+        get() = _strokeColor
 
     fun shapeSelected(shape: String?) {
         _currentShape.value = shape
@@ -50,6 +54,37 @@ class ShapeGeneratorViewModel @Inject constructor() : ViewModel() {
     fun generateShape() {
         if (_currentShape.value == null) {
             return
+        }
+    }
+
+    fun getDimen1Value(): Int {
+        val value = dimension1Value.value
+        return value?.toInt() ?: 0
+    }
+
+    fun getDimen2Value(): Int {
+        val value = dimension2Value.value
+        return value?.toInt() ?: 0
+    }
+
+    fun colorSelected(colorString: String?) {
+        when (colorString) {
+            "Purple" -> {
+                _colorSelected.value = R.color.light_purple_aa
+                _strokeColor.value = R.color.light_purple_a6
+            }
+            "Red" -> {
+                _colorSelected.value = R.color.light_red_aa
+                _strokeColor.value = R.color.light_red_ff
+            }
+            "Green" -> {
+                _colorSelected.value = R.color.light_green_aa
+                _strokeColor.value = R.color.light_green_80
+            }
+            "Black" -> {
+                _colorSelected.value = R.color.black_aa
+                _strokeColor.value = R.color.black
+            }
         }
     }
 }
