@@ -3,17 +3,23 @@ package com.fabinpaul.shapegenerator
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.fabinpaul.shapegenerator.data.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class ShapeGeneratorViewModel @Inject constructor() : ViewModel() {
 
-    private val _dimension1 = MutableLiveData<Int>(0)
+    var canvasHeight: Int = 0
+        private set
+    var canvasWidth: Int = 0
+        private set
+
+    private val _dimension1 = MutableLiveData(0)
     val dimension1: LiveData<Int>
         get() = _dimension1
 
-    private val _dimension2 = MutableLiveData<Int>(0)
+    private val _dimension2 = MutableLiveData(0)
     val dimension2: LiveData<Int>
         get() = _dimension2
 
@@ -21,17 +27,21 @@ class ShapeGeneratorViewModel @Inject constructor() : ViewModel() {
 
     val dimension2Value = MutableLiveData<String>()
 
-    private val _currentShape = MutableLiveData<String?>()
-    val currentShape: LiveData<String?>
-        get() = _currentShape
+    private val _snackBarMsgRes = MutableLiveData<Event<Int?>>()
+    val snackBarMsgRes: LiveData<Event<Int?>>
+        get() = _snackBarMsgRes
 
-    private val _colorSelected = MutableLiveData<Int>(R.color.light_purple_aa)
+    private val _colorSelected = MutableLiveData(R.color.light_purple_aa)
     val colorSelected: LiveData<Int>
         get() = _colorSelected
 
-    private val _strokeColor = MutableLiveData<Int>(R.color.light_purple_a6)
+    private val _strokeColor = MutableLiveData(R.color.light_purple_a6)
     val strokeColor: LiveData<Int>
         get() = _strokeColor
+
+    private val _currentShape = MutableLiveData<String?>()
+    val currentShape: LiveData<String?>
+        get() = _currentShape
 
     fun shapeSelected(shape: String?) {
         _currentShape.value = shape
@@ -48,12 +58,6 @@ class ShapeGeneratorViewModel @Inject constructor() : ViewModel() {
                 _dimension1.value = R.string.enter_side
                 _dimension2.value = 0
             }
-        }
-    }
-
-    fun generateShape() {
-        if (_currentShape.value == null) {
-            return
         }
     }
 
@@ -85,6 +89,48 @@ class ShapeGeneratorViewModel @Inject constructor() : ViewModel() {
                 _colorSelected.value = R.color.black_aa
                 _strokeColor.value = R.color.black
             }
+        }
+    }
+
+    fun updateCanvas(width: Int, height: Int) {
+        canvasWidth = width
+        canvasHeight = height
+    }
+
+    fun validateShapeDimens(): Boolean {
+        when (_currentShape.value) {
+            "Circle" -> {
+                return if (getDimen1Value() * 2 > canvasWidth || getDimen1Value() * 2 > canvasHeight) {
+                    _snackBarMsgRes.value = Event(R.string.error_large_radius)
+                    false
+                } else {
+                    true
+                }
+            }
+            "Rectangle" -> {
+                return when {
+                    getDimen1Value() > canvasHeight -> {
+                        _snackBarMsgRes.value = Event(R.string.error_large_length)
+                        false
+                    }
+                    getDimen2Value() > canvasWidth -> {
+                        _snackBarMsgRes.value = Event(R.string.error_large_width)
+                        false
+                    }
+                    else -> {
+                        true
+                    }
+                }
+            }
+            "Square" -> {
+                return if (getDimen1Value() > canvasWidth || getDimen1Value() > canvasHeight) {
+                    _snackBarMsgRes.value = Event(R.string.error_large_side)
+                    false
+                } else {
+                    true
+                }
+            }
+            else -> return false
         }
     }
 }

@@ -19,6 +19,10 @@
     <string name="red">Red</string>
     <string name="green">Green</string>
     <string name="black">Black</string>
+    <string name="error_large_radius">Radius of the circle is too large to displayed below</string>
+    <string name="error_large_length">Length of the rectangle is too large to displayed below</string>
+    <string name="error_large_width">Width of the rectangle is too large to displayed below</string>
+    <string name="error_large_side">Side of the square is too large to displayed below</string>
 
     <string-array name="shape_array">
         <item>@string/circle</item>

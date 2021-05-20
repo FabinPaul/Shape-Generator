@@ -2,20 +2,20 @@ package com.fabinpaul.shapegenerator.shapes
 
 import android.graphics.drawable.GradientDrawable
 
-class CircleShape(
-    private val radius: Int,
+class Rectangle(
+    private val length: Int,
+    private val width: Int,
     colorBg: Int,
     colorStroke: Int,
-    width: Int,
-    height: Int
+    canvasWidth: Int,
+    canvasHeight: Int
 ) : GradientDrawable() {
 
     init {
-        shape = OVAL
-        cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+        shape = RECTANGLE
         setColor(colorBg)
         setStroke(STROKE_WIDTH, colorStroke)
-        setSize(width, height)
+        setSize(canvasWidth, canvasHeight)
     }
 
     override fun setBounds(left: Int, top: Int, right: Int, bottom: Int) {
@@ -23,7 +23,12 @@ class CircleShape(
         val height = bottom - top
         val centerX = width / 2 + left
         val centerY = height / 2 + top
-        super.setBounds(centerX - radius, centerY - radius, centerX + radius, centerY + radius)
+        super.setBounds(
+            centerX - this.width / 2,
+            centerY - length / 2,
+            centerX + this.width / 2,
+            centerY + length / 2
+        )
     }
 
     companion object {

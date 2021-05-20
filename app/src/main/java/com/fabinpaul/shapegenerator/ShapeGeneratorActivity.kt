@@ -1,14 +1,17 @@
 package com.fabinpaul.shapegenerator
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.fabinpaul.shapegenerator.databinding.ActivityShapeGeneratorBinding
 import com.fabinpaul.shapegenerator.shapes.CircleShape
+import com.fabinpaul.shapegenerator.shapes.Rectangle
+import com.fabinpaul.shapegenerator.shapes.SquareShape
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,6 +32,9 @@ class ShapeGeneratorActivity : AppCompatActivity() {
             updateShape(viewModel.currentShape.value)
         }
         setUpObservers()
+        binding.ivShapeCanvas.post {
+            viewModel.updateCanvas(binding.ivShapeCanvas.width, binding.ivShapeCanvas.height)
+        }
     }
 
     private fun setUpObservers() {
@@ -37,6 +43,11 @@ class ShapeGeneratorActivity : AppCompatActivity() {
         })
         viewModel.strokeColor.observe(this, {
             updateShape(viewModel.currentShape.value)
+        })
+        viewModel.snackBarMsgRes.observe(this, {
+            it.getContentIfNotHandled()?.let {
+                Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
+            }
         })
     }
 
@@ -72,6 +83,9 @@ class ShapeGeneratorActivity : AppCompatActivity() {
     }
 
     private fun updateShape(shape: String?) {
+        if (!viewModel.validateShapeDimens()) {
+            return
+        }
         val dimen1 = viewModel.getDimen1Value()
         val dimen2 = viewModel.getDimen2Value()
         val color = viewModel.colorSelected.value
@@ -82,7 +96,34 @@ class ShapeGeneratorActivity : AppCompatActivity() {
                     val circleShape = CircleShape(
                         dimen1,
                         ContextCompat.getColor(this, color),
-                        ContextCompat.getColor(this, strokeColor)
+                        ContextCompat.getColor(this, strokeColor),
+                        viewModel.canvasWidth,
+                        viewModel.canvasHeight
+                    )
+                    binding.ivShapeCanvas.setImageDrawable(circleShape)
+                }
+            }
+            "Square" -> {
+                if (color != null && strokeColor != null) {
+                    val circleShape = SquareShape(
+                        dimen1,
+                        ContextCompat.getColor(this, color),
+                        ContextCompat.getColor(this, strokeColor),
+                        viewModel.canvasWidth,
+                        viewModel.canvasHeight
+                    )
+                    binding.ivShapeCanvas.setImageDrawable(circleShape)
+                }
+            }
+            "Rectangle" -> {
+                if (color != null && strokeColor != null) {
+                    val circleShape = Rectangle(
+                        dimen1,
+                        dimen2,
+                        ContextCompat.getColor(this, color),
+                        ContextCompat.getColor(this, strokeColor),
+                        viewModel.canvasWidth,
+                        viewModel.canvasHeight
                     )
                     binding.ivShapeCanvas.setImageDrawable(circleShape)
                 }

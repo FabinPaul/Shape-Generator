@@ -2,8 +2,8 @@ package com.fabinpaul.shapegenerator.shapes
 
 import android.graphics.drawable.GradientDrawable
 
-class CircleShape(
-    private val radius: Int,
+class SquareShape(
+    private val edge: Int,
     colorBg: Int,
     colorStroke: Int,
     width: Int,
@@ -11,8 +11,7 @@ class CircleShape(
 ) : GradientDrawable() {
 
     init {
-        shape = OVAL
-        cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+        shape = RECTANGLE
         setColor(colorBg)
         setStroke(STROKE_WIDTH, colorStroke)
         setSize(width, height)
@@ -23,7 +22,12 @@ class CircleShape(
         val height = bottom - top
         val centerX = width / 2 + left
         val centerY = height / 2 + top
-        super.setBounds(centerX - radius, centerY - radius, centerX + radius, centerY + radius)
+        super.setBounds(
+            centerX - edge / 2,
+            centerY - edge / 2,
+            centerX + edge / 2,
+            centerY + edge / 2
+        )
     }
 
     companion object {
